@@ -1,5 +1,13 @@
-
 close all;
+
+% Получить имя текущего скрипта (без расширения)
+scriptName = mfilename;
+
+% Создать папку с именем скрипта, если её нет
+if ~exist(scriptName, 'dir')
+    mkdir(scriptName);
+end
+
 % Исходные данные
 files = flip(["data-100", "data-80", "data-60", "data-40", "data-20", ...
               "data20", "data40", "data60", "data80", "data100"]);
@@ -204,3 +212,19 @@ legend(Legend3, 'Interpreter', 'none', 'Location', 'best', 'FontSize', 10);
 figure(10);
 xlim([0 1]);
 legend(Legend3, 'Interpreter', 'none', 'Location', 'best', 'FontSize', 10);
+
+% Сохранение графиков
+figures = findobj('Type', 'figure'); % Найти все открытые фигуры
+for i = 1:numel(figures)
+    figure(figures(i)); % Активировать фигуру
+    set(gcf, 'Position', [100, 100, 800, 400]); % Установить размер окна
+    
+    % Настройка легенды справа
+    legend('Location', 'eastoutside');
+    
+    % Убрать лишние отступы
+    set(gca, 'LooseInset', get(gca, 'TightInset'));
+    
+    % Сохранить в папку
+    saveas(gcf, fullfile(scriptName, sprintf('Figure_%d.svg', figures(i).Number)));
+end
